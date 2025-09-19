@@ -1,3 +1,4 @@
+# TODO: Make decision about how to represent data (probably check with Dr. Ferrer then implement
 def tfidf(corpus):
     ## probably have corpus be a list of documents, where each document is just the string of words
     ## make list of every term in each document
