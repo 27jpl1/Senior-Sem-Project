@@ -1,3 +1,4 @@
+import math
 import random
 import sys
 from scipy.spatial import distance
@@ -7,10 +8,10 @@ def find_nearest_centroid(centers: list, scores: list):
     closest_center = []                     #Initalizes closest center (This will be replaced)
     closest_distance = sys.maxsize          # Initializes the closest distance to be the max int
     for center in centers:                  # For each centroid, see if it is closer to the document scores and if so make note of it
-        euclid_dist = distance.cosine(center, scores)       #Cosine distance as distance metric
-        if euclid_dist < closest_distance:
+        cos_dist = distance.cosine(center, scores)       #Cosine distance as distance metric
+        if cos_dist < closest_distance:
             closest_center = center
-            closest_distance = euclid_dist
+            closest_distance = cos_dist
     return closest_center
 
 
@@ -27,7 +28,11 @@ def k_means_cluster(k: int, data: dict, num_terms: int):
         loop += 1
         print("loop: " + str(loop))
         new_centroids, no_new_assignments, clusters = new_cluster(new_centroids, data, num_terms)
-    return clusters    # returns the cluster, so they can be analyzed
+    total_distance = 0          # records the total distance between each point and its centroid
+    for centroid in clusters.keys():
+        for document in clusters[centroid]:
+            total_distance += math.dist(centroid, data[document])       #TODO: Decide between cosine and euclidean distance
+    return clusters, total_distance    # returns the clusters and total_distance, so they can be analyzed
 
 
 
@@ -57,5 +62,3 @@ def new_cluster(centroids: list, data: dict, num_terms: int):
     return new_centroids, is_same_centroids, clusters
 
 # TODO: Kmeans ++ to initialize data
-# TODO: Have a return value of the total distance of all points from the centers
-
