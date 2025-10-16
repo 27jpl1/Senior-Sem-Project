@@ -3,6 +3,27 @@ import random
 import sys
 from scipy.spatial import distance
 
+# A function to initialize the centroids using k-means++
+def k_means_plus_plus(data_points: list, k:int):
+    current_centroid = random.choice(data_points)       # randomly select the first centroid
+    centroids = [current_centroid]                      #a list of all centroids chosen
+    while len(centroids) < k:                           # while k centroids have not been chosen, chose another
+        distances = {}
+        for point in data_points:                       # Find the smallest distance to any current centroid and square it
+            temp_dist = sys.maxsize
+            for centroid in centroids:
+                dist_to = math.dist(point, centroid)
+                if dist_to < temp_dist:
+                    temp_dist = dist_to
+            distances[point] = temp_dist ** 2
+        total = sum(distances.values())                 # Find the total distance to create probabilities
+        probabilities = []
+        for point in data_points:                       # Create a list of probabilities
+            probabilities.append(distances[point] / total)
+        centroids.append(random.choices(data_points, weights=probabilities, k=1)[0])       #Chose a new centroid based on the probabilities
+    return centroids
+
+
 # A method to find the nearest centroid of a given point
 def find_nearest_centroid(centers: list, scores: list):
     closest_center = []                     #Initalizes closest center (This will be replaced)
@@ -60,5 +81,3 @@ def new_cluster(centroids: list, data: dict, num_terms: int):
         else:                                   # if the centroid is not part of the new centroids,
             is_same_centroids = False              # then the centroids are not the same
     return new_centroids, is_same_centroids, clusters
-
-# TODO: Kmeans ++ to initialize data
