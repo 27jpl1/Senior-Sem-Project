@@ -15,11 +15,11 @@ def k_means_plus_plus(data_points: list, k:int):
                 dist_to = math.dist(point, centroid)
                 if dist_to < temp_dist:
                     temp_dist = dist_to
-            distances[point] = temp_dist ** 2
+            distances[tuple(point)] = temp_dist ** 2
         total = sum(distances.values())                 # Find the total distance to create probabilities
         probabilities = []
         for point in data_points:                       # Create a list of probabilities
-            probabilities.append(distances[point] / total)
+            probabilities.append(distances[tuple(point)] / total)
         centroids.append(random.choices(data_points, weights=probabilities, k=1)[0])       #Chose a new centroid based on the probabilities
     return centroids
 
@@ -38,11 +38,7 @@ def find_nearest_centroid(centers: list, scores: list):
 
 # A function to run the k-means clustering algorithm on a set of documents and their idf scores
 def k_means_cluster(k: int, data: dict, num_terms: int):
-    beginning_centroids = random.sample(data.keys(), k)    # chooses k random centroids
-    beginning_centroid_scores = []
-    for centroid in beginning_centroids:            # creates a list of the scores for the  beginning centroids
-        beginning_centroid_scores.append(data[centroid])
-    new_centroids = beginning_centroid_scores
+    new_centroids = k_means_plus_plus(list(data.values()), k)
     no_new_assignments = False
     loop = 0
     while not no_new_assignments:               # while the clusters continue changing between runs, continue running the algorithm
