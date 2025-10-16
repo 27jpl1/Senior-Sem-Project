@@ -1,4 +1,3 @@
-import math
 import random
 import sys
 from scipy.spatial import distance
@@ -21,21 +20,7 @@ def k_means_cluster(k: int, data: dict, num_terms: int):
     beginning_centroid_scores = []
     for centroid in beginning_centroids:            # creates a list of the scores for the  beginning centroids
         beginning_centroid_scores.append(data[centroid])
-    clusters = {}
-    for centroid in beginning_centroids:        # creates a dictionary to hold the items for each cluster
-        centroid = tuple(data[centroid])
-        clusters[centroid] = []
-    for document in data.keys():                          # loops through all document and assigns them to the correct cluster
-        clusters[tuple(find_nearest_centroid(beginning_centroid_scores, data[document]))].append(document)
-    new_centroids = []
-    for centroid in clusters.keys():
-        mean = [0] * num_terms              # creates a list of 0s that will be used to find the new centroid
-        for document in clusters[centroid]:        # for each document in the cluster,
-            for i in range(0, num_terms):    # add each dimension to the mean
-                mean[i] += data[document][i]
-        for i in range(0, len(mean)):           # divide total dimensions by total documents in cluster
-            mean[i] /= len(clusters[centroid])
-        new_centroids.append(mean)              # add the mean to the new_centroids
+    new_centroids = beginning_centroid_scores
     no_new_assignments = False
     loop = 0
     while not no_new_assignments:               # while the clusters continue changing between runs, continue running the algorithm
