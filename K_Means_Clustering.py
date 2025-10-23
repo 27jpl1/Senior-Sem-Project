@@ -1,4 +1,3 @@
-import math
 import random
 import sys
 from scipy.spatial import distance
@@ -12,7 +11,7 @@ def k_means_plus_plus(data_points: list, k:int):
         for point in data_points:                       # Find the smallest distance to any current centroid and square it
             temp_dist = sys.maxsize
             for centroid in centroids:
-                dist_to = math.dist(point, centroid)
+                dist_to = distance.cosine(point, centroid)
                 if dist_to < temp_dist:
                     temp_dist = dist_to
             distances[tuple(point)] = temp_dist ** 2
@@ -48,7 +47,7 @@ def k_means_cluster(k: int, data: dict, num_terms: int):
     total_distance = 0          # records the total distance between each point and its centroid
     for centroid in clusters.keys():
         for document in clusters[centroid]:
-            total_distance += math.dist(centroid, data[document])       #TODO: Decide between cosine and euclidean distance
+            total_distance += distance.cosine(centroid, data[document])
     return clusters, total_distance    # returns the clusters and total_distance, so they can be analyzed
 
 
