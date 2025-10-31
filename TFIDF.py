@@ -1,7 +1,6 @@
-# A method that returns the list of terms for all documents and a histogram of how many documents each term appears in
 import math
 
-
+# A method that returns the list of terms for all documents and a histogram of how many documents each term appears in
 def filter_terms(document_dictionary):
     term_list = []          # A list of all terms found in the corpus (This may need to be a set then convert to list)
     term_hist = {}          # A histogram of the number of documents the term appears in
@@ -48,16 +47,4 @@ def tfidf(corpus):
                 idf_scores.append(0)
         doc_scores[doc] = idf_scores
 
-    # could have a function create a list of term_idf_scores
-    # then just loop through documents and find term frequency for every term and multiply to get score
-    # keep scores in list and then have it as a value to a document key
-    print(doc_dict)
-    print(term_list)
-    print(term_hist)
-    for doc in doc_dict:
-        print(doc, doc_scores[doc])
-    return doc_scores
-
-
-document = open("Who Wrote the Bible Verse Combinations", "r")
-tfidf(document.readlines())
+    return doc_scores, len(term_list)
