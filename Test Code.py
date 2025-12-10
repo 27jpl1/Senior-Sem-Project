@@ -1,25 +1,22 @@
-w = open("Genesis/Genesis 7", "r").readlines()
-verses = []
-for part in w:
-    verses.append(part.split())
+import K_Means_Clustering
+import TFIDF
+import sys
 
-terms = {}
-word_count = 0
-for verse in verses:
-    for word in verse:
-        word_count += 1
-        if word not in terms.keys():
-            terms[word] = 1
-        else:
-            terms[word] += 1
-
-term_frequency = {}
-for key in terms.keys():
-    term_frequency[key] = terms[key]/word_count
-
-words = terms.keys()
-print(words)
-
-## And then I could return words, and update a global histogram of word count for corpus
-## Also would return term_frequency
-## Would then probably have to convert it to all words once all documents were processed
+document = open("Who Wrote The Bible Combinations/All Verses", "r")
+scores, num_terms = TFIDF.tfidf(document.readlines())
+print("before clustering")
+best_clusters = []
+best_dist = sys.maxsize
+for i in range(0, 1):
+    print("test:", i)
+    clusters, dist = K_Means_Clustering.k_means_cluster(4, scores, num_terms)
+    print(dist)
+    for key in clusters.keys():
+        print(clusters[key])
+    if dist < best_dist:
+        best_clusters = clusters
+        best_dist = dist
+print()
+for key in best_clusters.keys():
+    print(best_clusters[key])
+print(best_dist)
